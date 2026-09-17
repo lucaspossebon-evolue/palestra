@@ -871,27 +871,26 @@ input.erro, select.erro { border-color: var(--d); }
 
   /* ---------------- dados ---------------- */
 
-  var TURMA_SEL = '';   // '' = evento padrão do config; '*' = todas
+  var TURMA_SEL = '*';   // abre em todas; '' = evento padrão do config
 
   function opcoesBase() {
     var sel = $('turmaSel');
     sel.innerHTML = '';
-    var padrao = document.createElement('option');
-    padrao.value = '';
-    padrao.textContent = 'Palestra (' + (CFG.EVENTO || 'palestra') + ')';
-    sel.appendChild(padrao);
     var todas = document.createElement('option');
     todas.value = '*';
     todas.textContent = 'Todas as turmas';
     sel.appendChild(todas);
-    sel.value = TURMA_SEL || '';
+    var padrao = document.createElement('option');
+    padrao.value = '';
+    padrao.textContent = 'Palestra (' + (CFG.EVENTO || 'palestra') + ')';
+    sel.appendChild(padrao);
+    sel.value = TURMA_SEL;
   }
 
   function carregarTurmas() {
     opcoesBase();
     return EvolueDados.painel.turmas(SENHA).then(function (lista) {
       var sel = $('turmaSel');
-      var todas = sel.querySelector('option[value="*"]');
       var achou = 0;
 
       (lista || []).forEach(function (t) {
@@ -899,14 +898,14 @@ input.erro, select.erro { border-color: var(--d); }
         var o = document.createElement('option');
         o.value = t.evento;
         o.textContent = (t.turma_label || t.evento) + ' — ' + t.total + ' resposta' + (t.total == 1 ? '' : 's');
-        sel.insertBefore(o, todas);
+        sel.appendChild(o);
         achou++;
       });
 
       $('avisoTurmas').textContent = achou
         ? ''
         : 'Nenhuma turma com respostas ainda. A turma entra nesta lista assim que a primeira pessoa terminar o teste pelo QR code dela.';
-      sel.value = TURMA_SEL || '';
+      sel.value = TURMA_SEL;
     }).catch(function (e) {
       $('avisoTurmas').textContent =
         'Não consegui buscar a lista de turmas (' + (e && e.message ? e.message : 'erro') +
@@ -937,7 +936,7 @@ input.erro, select.erro { border-color: var(--d); }
     var sel = $('turmaSel');
     var o = document.createElement('option');
     o.value = cod; o.textContent = cod;
-    sel.insertBefore(o, sel.querySelector('option[value="*"]'));
+    sel.appendChild(o);
     sel.value = cod;
     carregar().catch(function () {});
   }
