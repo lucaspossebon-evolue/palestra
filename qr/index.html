@@ -373,6 +373,8 @@ input.erro, select.erro { border-color: var(--d); }
     padding: 7px 14px; font-size: 13px; cursor: pointer; color: var(--navy); font-weight: 600;
   }
   .historico button:hover { border-color: var(--navy); }
+  .historico button.tirar { color: var(--muted); font-weight: 500; padding: 7px 11px; }
+  .historico button.tirar:hover { color: var(--d); border-color: var(--d); }
 
   @media print {
     body.so-turma .cartaz:not(.turma) { display: none !important; }
@@ -641,13 +643,38 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       var b = document.createElement('button');
       b.type = 'button';
       b.textContent = t.nome || t.cod;
+      b.title = 'Gerar de novo o QR desta turma';
       b.addEventListener('click', function () {
         $('nomeTurma').value = t.nome || '';
         $('codTurma').value = t.cod;
         gerarTurma();
       });
+
+      var x = document.createElement('button');
+      x.type = 'button';
+      x.className = 'tirar';
+      x.textContent = '×';
+      x.title = 'Tirar da lista';
+      x.addEventListener('click', function () {
+        var resto = lerHistorico().filter(function (o) { return o.cod !== t.cod; });
+        try { localStorage.setItem('evolue_turmas', JSON.stringify(resto)); } catch (e) {}
+        pintarHistorico();
+      });
+
       box.appendChild(b);
+      box.appendChild(x);
     });
+
+    var limpar = document.createElement('button');
+    limpar.type = 'button';
+    limpar.className = 'tirar';
+    limpar.textContent = 'limpar lista';
+    limpar.addEventListener('click', function () {
+      try { localStorage.removeItem('evolue_turmas'); } catch (e) {}
+      $('cartazTurma').classList.add('oculto');
+      pintarHistorico();
+    });
+    box.appendChild(limpar);
   }
 
   $('nomeTurma').addEventListener('input', function () {
