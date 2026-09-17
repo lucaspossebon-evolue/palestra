@@ -63,6 +63,9 @@ window.EVOLUE_CONFIG = {
   // Deixe vazio para usar o endereço da própria página quando publicada.
   LINK_DISC: '',
 
+  // Página de vagas (Quickin), usada no cartaz A4.
+  LINK_VAGAS: 'https://jobs.quickin.io/evoluetreinamento/jobs',
+
   // WhatsApp da Evolue para o botão de contato no fim do teste.
   // Formato internacional, só números. Deixe vazio para esconder o botão.
   WHATSAPP: '5527998014705',
@@ -406,6 +409,12 @@ input.erro, select.erro { border-color: var(--d); }
     border-left: 4px solid var(--navy-2); background: #F4F7FC;
     padding: 14px 16px; border-radius: 0 12px 12px 0; margin-top: 22px; font-size: 15px;
   }
+  .selo-turma {
+    display: inline-block; margin: 0 auto 12px; padding: 7px 16px;
+    border-radius: 999px; background: rgba(255,255,255,.14);
+    color: #fff; font-size: 14px; font-weight: 600; letter-spacing: .01em;
+    border: 1px solid rgba(255,255,255,.22);
+  }
 </style>
 </head>
 <body>
@@ -415,6 +424,7 @@ input.erro, select.erro { border-color: var(--d); }
   <div class="letras" aria-hidden="true">
     <span class="l-d">D</span><span class="l-i">I</span><span class="l-s">S</span><span class="l-c">C</span>
   </div>
+  <p class="selo-turma oculto" id="seloTurma"></p>
   <h1 id="tituloTopo">Que perfil você leva para o trabalho?</h1>
   <p class="sub" id="subTopo">Dez situações do dia a dia. Responda com o que é mais parecido com você de verdade — não com o que parece mais bonito.</p>
 </header>
@@ -530,7 +540,27 @@ input.erro, select.erro { border-color: var(--d); }
   'use strict';
 
   var CFG = window.EVOLUE_CONFIG || {};
-  var EV = function () { return CFG.EVENTO || 'palestra-2026'; };
+
+  /* Turma/cliente: o QR code pode trazer ?t=codigo-da-turma e ?n=Nome legível.
+     Quando vem, tudo o que aquela pessoa responder fica separado nessa turma. */
+  function paramURL(nome) {
+    try {
+      var m = new RegExp('[?&]' + nome + '=([^&#]*)').exec(location.search);
+      return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : '';
+    } catch (e) { return ''; }
+  }
+
+  function codigoTurma(txt) {
+    return String(txt || '')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase().replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '').slice(0, 60);
+  }
+
+  var TURMA = codigoTurma(paramURL('t'));
+  var TURMA_NOME = paramURL('n').slice(0, 80);
+
+  var EV = function () { return TURMA || CFG.EVENTO || 'palestra-2026'; };
 
   var semSupabase = !CFG.SUPABASE_URL
     || CFG.SUPABASE_URL.indexOf('SEU-PROJETO') >= 0
@@ -602,6 +632,12 @@ input.erro, select.erro { border-color: var(--d); }
 
     modoTeste: modoTeste,
 
+    /* turma lida da URL (vazio quando é o evento padrão do config) */
+    turma: TURMA,
+    turmaNome: TURMA_NOME,
+    codigoTurma: codigoTurma,
+    evento: EV,
+
     limparTeste: function () {
       try {
         localStorage.removeItem(chave('participantes'));
@@ -651,7 +687,8 @@ input.erro, select.erro { border-color: var(--d); }
           p_nome: d.nome, p_telefone: d.telefone, p_email: d.email || '',
           p_d: d.d, p_i: d.i, p_s: d.s, p_c: d.c,
           p_perfil: d.perfil, p_label: d.label, p_respostas: d.respostas,
-          p_origem: d.origem || 'direto', p_evento: EV()
+          p_origem: d.origem || 'direto', p_evento: EV(),
+          p_turma_label: TURMA_NOME || null
         });
       }
 
@@ -661,6 +698,7 @@ input.erro, select.erro { border-color: var(--d); }
         d: d.d, i: d.i, s: d.s, c: d.c,
         perfil: d.perfil, perfil_label: d.label,
         origem: d.origem || 'direto',
+        evento: EV(), turma_label: TURMA_NOME || null,
         criado_em: new Date().toISOString()
       });
       gravar('disc', lista);
@@ -669,8 +707,8 @@ input.erro, select.erro { border-color: var(--d); }
 
     painel: {
 
-      participantes: function (senha) {
-        if (!modoTeste) return rpc('painel_participantes', { p_senha: senha, p_evento: EV() });
+      participantes: function (senha, evento) {
+        if (!modoTeste) return rpc('painel_participantes', { p_senha: senha, p_evento: evento || EV() });
 
         var discs = ler('disc');
         return espera(ler('participantes').map(function (p) {
@@ -687,9 +725,14 @@ input.erro, select.erro { border-color: var(--d); }
         }));
       },
 
-      disc: function (senha) {
-        if (!modoTeste) return rpc('painel_disc', { p_senha: senha, p_evento: EV() });
+      disc: function (senha, evento) {
+        if (!modoTeste) return rpc('painel_disc', { p_senha: senha, p_evento: evento === '*' ? null : (evento || EV()) });
         return espera(ler('disc'));
+      },
+
+      turmas: function (senha) {
+        if (!modoTeste) return rpc('painel_turmas', { p_senha: senha });
+        return espera([{ evento: EV(), turma_label: null, total: ler('disc').length }]);
       },
 
       sortear: function (senha, opcoes) {
@@ -1066,13 +1109,29 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 
   var veioDeIndicacao = /[?&]i=1\b/.test(location.search);
 
+  /* turma/cliente que veio no QR code */
+  var TURMA = EvolueDados.turma || '';
+  var TURMA_NOME = EvolueDados.turmaNome || '';
+  if (TURMA) {
+    var selo = document.getElementById('seloTurma');
+    selo.textContent = TURMA_NOME || 'Turma ' + TURMA;
+    selo.classList.remove('oculto');
+    document.getElementById('subTopo').textContent =
+      'Dez situações do dia a dia. Responda com o que é mais parecido com você de verdade — o resultado aparece na hora e fica com a equipe da Evolue.';
+  }
+
+  function sufixoTurma() {
+    if (!TURMA) return '';
+    return '&t=' + encodeURIComponent(TURMA) + (TURMA_NOME ? '&n=' + encodeURIComponent(TURMA_NOME) : '');
+  }
+
   function linkDoTeste() {
     var base = CFG.LINK_DISC || '';
     if (!base && (location.protocol === 'http:' || location.protocol === 'https:')) {
       base = location.href.split('#')[0].split('?')[0];
     }
     if (!base) return '';
-    return base + (base.indexOf('?') >= 0 ? '&' : '?') + 'i=1';
+    return base + (base.indexOf('?') >= 0 ? '&' : '?') + 'i=1' + sufixoTurma();
   }
 
   function textoConvite(dom) {
