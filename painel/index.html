@@ -502,6 +502,7 @@ input.erro, select.erro { border-color: var(--d); }
             <button class="btn btn-linha btn-menor" id="verTurma" style="width:auto">Ver</button>
           </div>
         </div>
+        <p class="ajuda" id="resumoTurmas" style="margin:0 0 10px"></p>
         <div class="resumo-disc" id="resumoDisc"></div>
         <div class="barra-acoes">
           <button class="btn btn-linha btn-menor" id="csvDisc">Baixar CSV</button>
@@ -932,6 +933,12 @@ input.erro, select.erro { border-color: var(--d); }
     $('nVagas').textContent = inscritos.filter(function (p) { return p.interesse_vagas; }).length;
     $('nSorteados').textContent = inscritos.filter(function (p) { return p.sorteado_em; }).length;
     $('nIndicados').textContent = discs.filter(function (r) { return r.origem === 'indicacao'; }).length;
+    var turmas = {};
+    discs.forEach(function (r) { turmas[nomeTurma(r)] = (turmas[nomeTurma(r)] || 0) + 1; });
+    var chaves = Object.keys(turmas);
+    $('resumoTurmas').textContent = chaves.length > 1
+      ? chaves.map(function (k) { return k + ': ' + turmas[k]; }).join('   ·   ')
+      : '';
   }
 
   /* ---------------- abas ---------------- */
@@ -1083,6 +1090,13 @@ input.erro, select.erro { border-color: var(--d); }
     });
   }
 
+  /* nome amigável da turma de cada resposta */
+  function nomeTurma(r) {
+    if (r.turma_label) return r.turma_label;
+    if (!r.evento || r.evento === (CFG.EVENTO || 'palestra-2026')) return 'Palestra';
+    return r.evento;
+  }
+
   function pintarDisc() {
     var corpo = $('tabelaDisc').querySelector('tbody');
     corpo.innerHTML = '';
@@ -1094,8 +1108,10 @@ input.erro, select.erro { border-color: var(--d); }
         '<td><span class="chip" style="background:' + (CORES[r.perfil] || '#5D6E88') + '">' + escapar(r.perfil_label || r.perfil || '') + '</span></td>' +
         '<td class="num">' + r.d + '</td><td class="num">' + r.i + '</td>' +
         '<td class="num">' + r.s + '</td><td class="num">' + r.c + '</td>' +
-        '<td>' + escapar(r.turma_label || r.evento || '') + '</td>' +
-        '<td>' + (r.origem === 'indicacao' ? '<span class="marca-sim">indicação</span>' : '<span class="marca-nao">palestra</span>') + '</td>' +
+        '<td>' + escapar(nomeTurma(r)) + '</td>' +
+        '<td>' + (r.origem === 'indicacao'
+            ? '<span class="marca-sim">indicação</span>'
+            : '<span class="marca-nao">QR direto</span>') + '</td>' +
         '<td class="num">' + new Date(r.criado_em).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + '</td>';
       corpo.appendChild(tr);
     });
@@ -1142,8 +1158,8 @@ input.erro, select.erro { border-color: var(--d); }
       ['Nome', 'WhatsApp', 'E-mail', 'Perfil', 'D', 'I', 'S', 'C', 'Turma', 'Veio de', 'Quando'],
       discs.map(function (r) {
         return [r.nome, r.telefone, r.email, r.perfil_label || r.perfil, r.d, r.i, r.s, r.c,
-                r.turma_label || r.evento || '',
-                r.origem === 'indicacao' ? 'indicacao' : 'palestra',
+                nomeTurma(r),
+                r.origem === 'indicacao' ? 'indicacao' : 'qr-direto',
                 new Date(r.criado_em).toLocaleString('pt-BR')];
       }));
   });
