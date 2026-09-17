@@ -54,6 +54,17 @@ window.EVOLUE_CONFIG = {
   // (ex.: 'faculdade-x-2026-10'). Precisa ser igual nas três páginas.
   EVENTO: 'palestra-2026',
 
+  // Sorteio: deixe false no dia a dia. Em eventos com sorteio, troque para
+  // true e gere os arquivos de novo — o bloco volta a aparecer na capa.
+  // A página /sorteio e o painel continuam existindo nos dois casos.
+  SORTEIO_ATIVO: false,
+
+  // Turma padrão do teste DISC: onde entram as respostas de quem chega
+  // sem código de turma (capa do site, cartaz impresso, link solto).
+  // As turmas de cliente continuam vindo do ?t= do QR code.
+  TURMA_PADRAO_DISC: 'site-evolue',
+  TURMA_PADRAO_NOME: 'Site Evolue',
+
   // Textos que aparecem para o aluno
   NOME_EVENTO: 'Palestra Evolue',
   LOCAL_EVENTO: '',            // ex.: 'Faculdade X — Auditório'
@@ -69,6 +80,10 @@ window.EVOLUE_CONFIG = {
   // WhatsApp da Evolue para o botão de contato no fim do teste.
   // Formato internacional, só números. Deixe vazio para esconder o botão.
   WHATSAPP: '5527998014705',
+
+  // Instagram da Evolue (só o usuário, sem @ e sem o endereço completo).
+  // Aparece na capa no lugar do site.
+  INSTAGRAM: 'evoluetreinamento',
 
   // Site que aparece no rodapé
   SITE: 'evoluetreinamento.com.br'
@@ -562,6 +577,19 @@ input.erro, select.erro { border-color: var(--d); }
 
   var EV = function () { return TURMA || CFG.EVENTO || 'palestra-2026'; };
 
+  /* Evento usado pelo teste DISC: a turma do QR code quando existe; senão a
+     turma padrão do config (site/cartaz/link solto); senão o evento. */
+  var EV_DISC = function () {
+    if (TURMA) return TURMA;
+    var padrao = codigoTurma(CFG.TURMA_PADRAO_DISC || '');
+    return padrao || EV();
+  };
+
+  var NOME_DISC = function () {
+    if (TURMA) return TURMA_NOME || '';
+    return codigoTurma(CFG.TURMA_PADRAO_DISC || '') ? (CFG.TURMA_PADRAO_NOME || '') : '';
+  };
+
   var semSupabase = !CFG.SUPABASE_URL
     || CFG.SUPABASE_URL.indexOf('SEU-PROJETO') >= 0
     || !CFG.SUPABASE_ANON_KEY
@@ -687,8 +715,8 @@ input.erro, select.erro { border-color: var(--d); }
           p_nome: d.nome, p_telefone: d.telefone, p_email: d.email || '',
           p_d: d.d, p_i: d.i, p_s: d.s, p_c: d.c,
           p_perfil: d.perfil, p_label: d.label, p_respostas: d.respostas,
-          p_origem: d.origem || 'direto', p_evento: EV(),
-          p_turma_label: TURMA_NOME || null
+          p_origem: d.origem || 'direto', p_evento: EV_DISC(),
+          p_turma_label: NOME_DISC() || null
         });
       }
 
@@ -698,7 +726,7 @@ input.erro, select.erro { border-color: var(--d); }
         d: d.d, i: d.i, s: d.s, c: d.c,
         perfil: d.perfil, perfil_label: d.label,
         origem: d.origem || 'direto',
-        evento: EV(), turma_label: TURMA_NOME || null,
+        evento: EV_DISC(), turma_label: NOME_DISC() || null,
         criado_em: new Date().toISOString()
       });
       gravar('disc', lista);
