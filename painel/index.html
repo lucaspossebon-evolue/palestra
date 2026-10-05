@@ -29,8 +29,8 @@ window.EVOLUE_CONFIG = {
 
   // Supabase > Project Settings > API Keys
   // Serve tanto a chave nova (sb_publishable_...) quanto a antiga (eyJ...).
-  SUPABASE_URL: 'https://mvlvvsjunyeaylgrbqqh.supabase.co',
-  SUPABASE_ANON_KEY: 'sb_publishable_0He1squP37rZP9dxlApOmw__iSj4CnY',
+  SUPABASE_URL: 'https://wmfevnhfkgrwvernyqcf.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_UHvzB_OuCtbda_rGxunDXw_WGBIE6wH',
 
   // Endereço público do site (sem barra no fim). Usado nas etiquetas de
   // compartilhamento, que precisam de endereço absoluto. Ao trocar para o
@@ -602,7 +602,7 @@ input.erro, select.erro { border-color: var(--d); }
      Authorization faz a plataforma tentar lê-la como JWT e recusar. */
   function cabecalhos() {
     var chave = CFG.SUPABASE_ANON_KEY || '';
-    var h = { 'Content-Type': 'application/json', 'apikey': chave };
+    var h = { 'Content-Type': 'application/json', 'apikey': chave, 'Content-Profile': 'palestra' };
     if (chave.indexOf('eyJ') === 0) h['Authorization'] = 'Bearer ' + chave;
     return h;
   }
