@@ -1,1 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Evolue — Kit da palestra</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0B1F3A">
+<link rel="icon" href="/favicon.ico?v3" sizes="any">
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon-64.png?v3">
+<link rel="apple-touch-icon" href="/favicon-180.png?v3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:   #0B1F3A;
+    --navy-2: #16305A;
+    --mist:   #EDF1F6;
+    --paper:  #FFFFFF;
+    --ink:    #17202F;
+    --muted:  #5D6E88;
+    --line:   #D7DEE8;
 
+    --d: #DA3A34;
+    --i: #E8A317;
+    --s: #1E9C63;
+    --c: #2D6BC4;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--mist);
+    color: var(--ink);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2 {
+    font-family: 'Bricolage Grotesque', Inter, sans-serif;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  .topo {
+    background: var(--navy);
+    color: #fff;
+    padding: 30px 18px 34px;
+    border-radius: 0 0 26px 26px;
+    margin-bottom: -22px;
+  }
+
+  .topo .dentro { width: 100%; max-width: 560px; margin: 0 auto; }
+
+  .marca {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    font-size: 19px;
+    letter-spacing: .06em;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+
+  .topo h1 { font-size: clamp(27px, 7vw, 36px); color: #fff; }
+
+  .topo p {
+    color: #B9C9E2;
+    font-size: 15px;
+    margin: 10px 0 0;
+    max-width: 44ch;
+  }
+
+  .wrap { width: 100%; max-width: 560px; margin: 0 auto; padding: 0 18px 50px; }
+
+  .lista { display: grid; gap: 12px; position: relative; z-index: 1; }
+
+  .item {
+    display: block;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    border-left: 6px solid var(--navy-2);
+    border-radius: 14px;
+    padding: 18px 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .12s, transform .06s;
+  }
+  .item:hover { border-color: #AEBDD2; }
+  .item:active { transform: translateY(1px); }
+  .item:focus-visible { outline: 3px solid #7FA8E0; outline-offset: 2px; }
+
+  .item h2 { font-size: 19px; margin-bottom: 4px; }
+  .item p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.45; }
+
+  .sorteio { border-left-color: var(--i); }
+  .disc    { border-left-color: var(--c); }
+  .qr      { border-left-color: var(--s); }
+  .painel  { border-left-color: var(--d); }
+
+  .reservado {
+    display: inline-block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--d);
+    margin-top: 8px;
+  }
+
+  .secao {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 26px 0 10px;
+  }
+
+  .rodape {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 8px 18px 36px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: .001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="dentro">
+    <div class="marca">EVOLUE</div>
+    <h1>Kit da palestra</h1>
+    <p>Tudo o que a equipe usa antes, durante e depois do evento.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <p class="secao">Para mostrar e divulgar</p>
+  <div class="lista">
+    <a class="item qr" href="../qr/">
+      <h2>QR codes e turmas</h2>
+      <p>Gere os códigos do sorteio e do teste, projete no telão ou imprima. É aqui que você cria o QR de cada cliente ou turma.</p>
+    </a>
+
+    <a class="item disc" href="../disc/">
+      <h2>Teste DISC</h2>
+      <p>A página que o participante responde. Abra para conferir como está antes de divulgar.</p>
+    </a>
+
+    <a class="item sorteio" href="../sorteio/">
+      <h2>Cadastro do sorteio</h2>
+      <p>O formulário de inscrição. Mesma coisa: serve para conferir.</p>
+    </a>
+  </div>
+
+  <p class="secao">Para acompanhar</p>
+  <div class="lista">
+    <a class="item painel" href="../painel/">
+      <h2>Painel do sorteio e resultados</h2>
+      <p>Lista de inscritos, resultados do DISC por turma e o sorteio ao vivo. Baixa as listas em CSV.</p>
+      <span class="reservado">Pede a senha da equipe</span>
+    </a>
+  </div>
+
+  <p class="secao">Página pública</p>
+  <div class="lista">
+    <a class="item" href="../">
+      <h2>Capa do site</h2>
+      <p>O que o participante vê ao abrir o endereço principal: o teste, as vagas e o sorteio quando ele está ativo.</p>
+    </a>
+  </div>
+
+</main>
+
+<p class="rodape">Evolue Treinamento e Desenvolvimento</p>
+
+</body>
+</html>
