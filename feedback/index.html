@@ -208,6 +208,13 @@ a.btn{text-align:center;text-decoration:none}
 .app-name{font-weight:600;font-size:.9rem;opacity:.8;padding-left:.8rem;margin-left:.2rem;border-left:1px solid rgba(255,255,255,.35);letter-spacing:0}
 @media (max-width:560px){.app-name{display:none}.logo{height:2.3rem}}
 
+/* rodapé de contato */
+.site-foot{border-top:1px solid var(--line);margin-top:1rem;padding:1.1rem 0 1.4rem;font-size:.82rem;color:var(--ink-2)}
+.site-foot .wrap{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.5rem 1.4rem}
+.site-foot a{display:inline-flex;align-items:center;gap:.35rem;color:var(--ink-2);text-decoration:none;font-weight:600}
+.site-foot a:hover{color:var(--blue);text-decoration:underline}
+.site-foot svg{width:1rem;height:1rem;fill:currentColor;flex:0 0 auto}
+
 /* ===== Computador ===== */
 @media (min-width:1000px){
   .wrap{max-width:1180px;padding:0 2rem}
@@ -315,7 +322,6 @@ a.btn{text-align:center;text-decoration:none}
     <div class="list-head"><h2>Ou escolha um caso pronto</h2><span id="caseCount"></span></div>
     <div class="chips" id="chips" role="group" aria-label="Filtrar por tema"></div>
     <ul class="cases" id="cases"></ul>
-    <p class="foot">Evolue Treinamento e Desenvolvimento</p>
     </div>
   </section>
 
@@ -426,6 +432,20 @@ a.btn{text-align:center;text-decoration:none}
     <div class="btn-row other"><button class="btn secondary" data-go="home">Escolher outro caso</button></div>
   </section>
 </main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>Evolue Treinamento e Desenvolvimento</span>
+    <a href="https://wa.me/5527998014705" target="_blank" rel="noopener" aria-label="WhatsApp da Evolue: (27) 99801-4705">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+      (27) 99801-4705
+    </a>
+    <a href="https://www.instagram.com/evoluetreinamento/" target="_blank" rel="noopener" aria-label="Instagram da Evolue: @evoluetreinamento">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7.3a4.7 4.7 0 1 0 0 9.4 4.7 4.7 0 0 0 0-9.4Zm0 7.7a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm6-7.9a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0ZM21.9 8c-.1-1.6-.4-3-1.6-4.2C19.1 2.5 17.6 2.2 16 2.1c-1.6-.1-6.4-.1-8 0-1.6.1-3 .4-4.2 1.6C2.5 4.9 2.2 6.4 2.1 8c-.1 1.6-.1 6.4 0 8 .1 1.6.4 3 1.6 4.2 1.2 1.2 2.6 1.5 4.2 1.6 1.6.1 6.4.1 8 0 1.6-.1 3-.4 4.2-1.6 1.2-1.2 1.5-2.6 1.6-4.2.1-1.6.1-6.4 0-8Zm-2.1 9.7a3.3 3.3 0 0 1-1.8 1.8c-1.3.5-4.3.4-5.7.4s-4.5.1-5.7-.4a3.3 3.3 0 0 1-1.8-1.8C4.3 16.4 4.4 13.4 4.4 12s-.1-4.5.4-5.7a3.3 3.3 0 0 1 1.8-1.8C7.9 4 10.9 4.1 12.3 4.1s4.5-.1 5.7.4a3.3 3.3 0 0 1 1.8 1.8c.5 1.3.4 4.3.4 5.7s.1 4.4-.4 5.7Z"/></svg>
+      @evoluetreinamento
+    </a>
+  </div>
+</footer>
 
 <div class="modal" id="qrModal" hidden role="dialog" aria-modal="true" aria-labelledby="qrTitle">
   <div class="modal-box">
