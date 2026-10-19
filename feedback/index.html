@@ -207,6 +207,58 @@ a.btn{text-align:center;text-decoration:none}
 .logo{display:block;height:2.6rem;width:auto;max-width:62vw}
 .app-name{font-weight:600;font-size:.9rem;opacity:.8;padding-left:.8rem;margin-left:.2rem;border-left:1px solid rgba(255,255,255,.35);letter-spacing:0}
 @media (max-width:560px){.app-name{display:none}.logo{height:2.3rem}}
+
+/* ===== Computador ===== */
+@media (min-width:1000px){
+  .wrap{max-width:1180px;padding:0 2rem}
+  .top .wrap{min-height:4.6rem}
+  .logo{height:2.8rem}
+
+  /* início: apresentação à esquerda, casos à direita */
+  #home:not([hidden]){display:grid;grid-template-columns:400px 1fr;gap:3rem;align-items:start;padding-top:1rem}
+  .home-side{position:sticky;top:calc(5.6rem + env(safe-area-inset-top,0px))}
+  .hero{padding-top:1.5rem}
+  .hero h1{font-size:2.3rem}
+  .home-main .list-head{margin-top:2rem}
+  .home-main .real-entry{margin-top:2.6rem;padding:1.2rem 1.4rem;border-width:2px}
+  .home-main .real-entry .avatar{flex-basis:3rem;height:3rem}
+  .home-main .real-entry .case-title{font-size:1.15rem}
+  .cases{grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}
+  .case{height:100%;padding:1rem 1.1rem}
+  .case-cat{display:none}
+  .chips{flex-wrap:wrap;overflow:visible}
+
+  /* ficha: fatos à esquerda, cola e botão à direita */
+  #brief:not([hidden]){display:grid;grid-template-columns:minmax(0,1fr) 380px;column-gap:2.5rem;align-items:start;padding-bottom:2rem}
+  #brief .back,#brief .person{grid-column:1 / -1}
+  #brief .back,#go .back{justify-self:start}
+  #brief .person{margin-bottom:1.5rem}
+  #brief .person h1{font-size:2rem}
+  #brief .facts{grid-column:1}
+  .brief-side{grid-column:2;grid-row:3;position:sticky;top:calc(5.6rem + env(safe-area-inset-top,0px))}
+  .brief-side .guide{margin-top:0}
+  .brief-side .guide[open],.brief-side .guide{display:block}
+
+  /* tela de IA: instruções à esquerda, botões à direita */
+  #go:not([hidden]){display:grid;grid-template-columns:minmax(0,1fr) 400px;column-gap:3rem;align-items:start;padding-bottom:2rem}
+  #go .back{grid-column:1 / -1}
+  #go .ready{grid-column:1;grid-row:2;padding-top:.5rem}
+  #go .ready h1{font-size:2rem}
+  #go .how{grid-column:1;grid-row:3}
+  #go .notes{grid-column:1;grid-row:4}
+  #go .prompt-details{grid-column:1;grid-row:5}
+  #go .btn-row.ai{grid-column:2;grid-row:2 / 6;margin:0;position:sticky;top:calc(5.6rem + env(safe-area-inset-top,0px))}
+  #go .btn-row.other{grid-column:1;grid-row:6;max-width:320px}
+
+  /* formulário em duas colunas */
+  #real .ready{max-width:760px}
+  #realForm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:start;padding-bottom:2rem}
+  #realForm .panel{margin:0}
+  #realForm .panel-sci{grid-row:span 2}
+  #realForm .err-msg,#realForm .form-actions{grid-column:1 / -1}
+  #realForm .form-actions{display:flex;gap:.75rem;margin:0}
+  #realForm .form-actions .btn{width:auto;padding:.9rem 2rem}
+}
 .real-entry{width:100%;text-align:left;display:flex;gap:.85rem;align-items:center;background:var(--surface);border:2px dashed var(--accent);border-radius:14px;padding:.9rem;cursor:pointer;margin-top:.4rem}
 .real-entry .avatar{background:var(--accent);color:#2A1803;font-size:1.4rem}
 .panel h2.fh{margin:0 0 .3rem;font-size:1.05rem}
@@ -234,6 +286,7 @@ a.btn{text-align:center;text-decoration:none}
 <main class="wrap">
 
   <section id="home">
+    <div class="home-side">
     <div class="hero">
       <h1>Treine a conversa difícil antes de ter ela de verdade.</h1>
       <p>Escolha um caso, converse com o colaborador simulado pela IA no seu celular e receba uma avaliação pelo modelo sanduíche e SCI.</p>
@@ -252,15 +305,18 @@ a.btn{text-align:center;text-decoration:none}
       </div>
     </div>
 
+    </div>
+
+    <div class="home-main">
     <button type="button" class="real-entry" id="openReal">
       <span class="avatar" aria-hidden="true">+</span>
       <span class="case-txt"><span class="case-title">Usar uma situação real da minha equipe</span><br><span class="case-sub">Preencha os fatos e treine a conversa que você precisa ter</span></span>
     </button>
-
     <div class="list-head"><h2>Ou escolha um caso pronto</h2><span id="caseCount"></span></div>
     <div class="chips" id="chips" role="group" aria-label="Filtrar por tema"></div>
     <ul class="cases" id="cases"></ul>
     <p class="foot">Evolue Treinamento e Desenvolvimento</p>
+    </div>
   </section>
 
   <section id="brief" hidden>
@@ -275,7 +331,8 @@ a.btn{text-align:center;text-decoration:none}
       <div class="fact"><h3>Como costuma reagir</h3><p id="bPerf"></p></div>
       <div class="fact alert" id="bAlertBox" hidden><h3>Atenção</h3><p id="bAlert"></p></div>
     </div>
-    <details class="guide">
+    <div class="brief-side">
+    <details class="guide" id="briefGuide">
       <summary>Relembrar o sanduíche com SCI</summary>
       <ul>
         <li><strong>Pão de cima:</strong> um reconhecimento verdadeiro e específico. Nada de elogio genérico só para entrar no assunto.</li>
@@ -285,6 +342,7 @@ a.btn{text-align:center;text-decoration:none}
       </ul>
     </details>
     <div class="btn-row"><button class="btn" id="startBtn"></button></div>
+    </div>
   </section>
 
   <section id="real" hidden>
@@ -301,7 +359,7 @@ a.btn{text-align:center;text-decoration:none}
         <div class="field"><label for="rTempo">Tempo de empresa</label><input id="rTempo" placeholder="Ex.: 2 anos" autocomplete="off"></div>
       </div>
 
-      <div class="panel">
+      <div class="panel panel-sci">
         <h2 class="fh">O que aconteceu</h2>
         <p class="hint">Escreva como uma câmera veria: fatos, sem opiniões. Esses três campos já são o SCI que você vai usar na conversa.</p>
         <div class="field"><label for="rSit">Situação <span class="req">*</span><span class="sub">Quando e onde aconteceu</span></label><textarea id="rSit" placeholder="Ex.: Nas reuniões de segunda de manhã das últimas 3 semanas"></textarea></div>
@@ -336,7 +394,7 @@ a.btn{text-align:center;text-decoration:none}
       </div>
 
       <p class="err-msg" id="rErr" role="alert"></p>
-      <div class="btn-row">
+      <div class="btn-row form-actions">
         <button class="btn" type="submit">Preparar a conversa</button>
         <button class="btn secondary" type="button" id="rClear">Limpar campos</button>
       </div>
@@ -350,22 +408,22 @@ a.btn{text-align:center;text-decoration:none}
       <p id="gSub"></p>
     </div>
     <ol class="how">
-      <li><b>1</b><span>Toque em uma IA abaixo. O texto do caso é copiado automaticamente.</span></li>
+      <li><b>1</b><span>Escolha uma das IAs nos botões. O texto do caso é copiado automaticamente.</span></li>
       <li><b>2</b><span>Se a caixa de mensagem estiver vazia, toque e segure nela, escolha <strong>Colar</strong> e envie.</span></li>
       <li><b>3</b><span>Converse como líder. Quando terminar, escreva <strong>FIM</strong> para receber a avaliação.</span></li>
     </ol>
-    <div class="btn-row">
+    <div class="btn-row ai">
       <a class="btn" id="goChatgpt" target="_blank" rel="noopener">Abrir no ChatGPT<small>Funciona mesmo sem login</small></a>
       <a class="btn secondary" id="goGemini" target="_blank" rel="noopener">Abrir no Gemini<small>Usa sua conta Google</small></a>
       <a class="btn secondary" id="goClaude" target="_blank" rel="noopener">Abrir no Claude<small>Precisa de conta no Claude</small></a>
       <button class="btn secondary" id="copyOnly">Só copiar o texto</button>
     </div>
     <div class="notes">No final da avaliação a IA mostra uma linha com <code>NOTAS</code>. Tire um print ou anote para compartilhar com a turma.</div>
-    <details class="guide">
+    <details class="guide prompt-details">
       <summary>Ver o texto que será enviado</summary>
       <textarea class="prompt-box" id="promptBox" readonly aria-label="Texto do caso"></textarea>
     </details>
-    <div class="btn-row"><button class="btn secondary" data-go="home">Escolher outro caso</button></div>
+    <div class="btn-row other"><button class="btn secondary" data-go="home">Escolher outro caso</button></div>
   </section>
 </main>
 
@@ -412,6 +470,7 @@ const LEVELS = {
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const lc = t => t.charAt(0).toLowerCase() + t.slice(1);
 const initials = n => n.replace(/^(Seu|Dona)\s+/,"").split(/\s+/).map(p=>p[0]).slice(0,2).join("").toUpperCase();
 const state = {nivel:"medio", cat:"Todos", caso:null, prompt:"", from:"brief", reacts:new Set()};
 
@@ -473,7 +532,7 @@ function renderCases(){
   $("#cases").innerHTML = list.map(c => `
     <li><button type="button" class="case" data-case="${c.id}">
       <span class="avatar" aria-hidden="true">${esc(initials(c.nome))}</span>
-      <span class="case-txt"><span class="case-title">${esc(c.titulo)}</span><br><span class="case-sub">${esc(c.nome)}, ${esc(c.cargo.toLowerCase())}</span></span>
+      <span class="case-txt"><span class="case-title">${esc(c.titulo)}</span><br><span class="case-sub">${esc(c.nome)}, ${esc(lc(c.cargo))}</span></span>
       <span class="case-cat">${esc(c.cat)}</span>
     </button></li>`).join("");
 }
@@ -486,7 +545,7 @@ function openBrief(id){
   state.caso = c;
   $("#bAvatar").textContent = initials(c.nome);
   $("#bTitle").textContent = c.titulo;
-  $("#bWho").textContent = `${c.nome}, ${c.cargo.toLowerCase()}, ${c.tempo}`;
+  $("#bWho").textContent = `${c.nome}, ${lc(c.cargo)}, ${c.tempo}`;
   $("#bSit").textContent = c.situacao;
   $("#bPos").textContent = c.positivo;
   $("#bPerf").textContent = c.perfil;
@@ -599,6 +658,7 @@ if (/^https?:/.test(location.protocol)){
 
 
 renderLevels(); renderChips(); renderCases(); renderReacts();
+if (matchMedia("(min-width: 1000px)").matches) $("#briefGuide").open = true;
 const params = new URLSearchParams(location.search);
 if (params.get("nivel") && LEVELS[params.get("nivel")]){ state.nivel = params.get("nivel"); renderLevels(); }
 if (params.get("caso") === "real") openReal();
